@@ -1,0 +1,61 @@
+Manifest-Version: 1.0
+Main-Class: cn.edu.szu.dataskew.wordcount.DensityAwarePartitionerWordCou
+ nt
+Class-Path: osgi-resource-locator-1.0.1.jar leveldbjni-all-1.8.jar commo
+ ns-codec-1.10.jar oro-2.0.8.jar commons-compress-1.8.1.jar spark-launch
+ er_2.11-2.4.0.jar univocity-parsers-2.7.3.jar commons-crypto-1.0.0.jar 
+ commons-lang3-3.5.jar metrics-graphite-3.1.5.jar jersey-server-2.22.2.j
+ ar paranamer-2.7.jar commons-lang-2.6.jar commons-digester-1.8.jar apac
+ heds-kerberos-codec-2.0.0-M15.jar netty-3.9.9.Final.jar hadoop-client-2
+ .6.5.jar jackson-mapper-asl-1.9.13.jar hadoop-auth-2.6.5.jar gson-2.2.4
+ .jar aircompressor-0.10.jar spark-core_2.11-2.4.0.jar javax.servlet-api
+ -3.1.0.jar javax.annotation-api-1.2.jar jackson-annotations-2.6.7.jar h
+ k2-api-2.4.0-b34.jar commons-cli-1.2.jar joda-time-2.9.9.jar jersey-med
+ ia-jaxb-2.22.2.jar slf4j-api-1.7.16.jar javax.ws.rs-api-2.0.1.jar spark
+ -kvstore_2.11-2.4.0.jar xercesImpl-2.9.1.jar curator-client-2.6.0.jar l
+ og4j-1.2.17.jar compress-lzf-1.0.3.jar jackson-jaxrs-1.9.13.jar hadoop-
+ yarn-common-2.6.5.jar hadoop-yarn-server-common-2.6.5.jar aopalliance-r
+ epackaged-2.4.0-b34.jar metrics-json-3.1.5.jar kryo-shaded-4.0.2.jar js
+ on4s-ast_2.11-3.5.3.jar chill-java-0.9.3.jar commons-compiler-3.0.9.jar
+  hadoop-annotations-2.6.5.jar py4j-0.10.7.jar orc-mapreduce-1.5.2-nohiv
+ e.jar activation-1.1.1.jar xbean-asm6-shaded-4.8.jar jaxb-api-2.2.2.jar
+  parquet-jackson-1.10.0.jar commons-httpclient-3.1.jar commons-math3-3.
+ 4.1.jar spark-sql_2.11-2.4.0.jar orc-core-1.5.2-nohive.jar commons-io-2
+ .4.jar xmlenc-0.52.jar httpcore-4.2.4.jar hadoop-mapreduce-client-commo
+ n-2.6.5.jar spark-sketch_2.11-2.4.0.jar arrow-format-0.10.0.jar stream-
+ 2.7.0.jar jsr305-1.3.9.jar arrow-memory-0.10.0.jar arrow-vector-0.10.0.
+ jar slf4j-log4j12-1.7.16.jar scala-actors-2.11.0.jar scala-actors-migra
+ tion_2.11-1.1.0.jar scala-library.jar scala-parser-combinators_2.11-1.0
+ .4.jar scala-reflect.jar scala-swing_2.11-1.0.2.jar scala-xml_2.11-1.0.
+ 4.jar hadoop-mapreduce-client-core-2.6.5.jar spark-catalyst_2.11-2.4.0.
+ jar objenesis-2.5.1.jar guava-16.0.1.jar jersey-container-servlet-core-
+ 2.22.2.jar parquet-format-2.4.0.jar hadoop-common-2.6.5.jar snappy-java
+ -1.1.7.1.jar spark-unsafe_2.11-2.4.0.jar jul-to-slf4j-1.7.16.jar valida
+ tion-api-1.1.0.Final.jar spark-network-common_2.11-2.4.0.jar jersey-com
+ mon-2.22.2.jar commons-beanutils-1.7.0.jar pyrolite-4.13.jar xz-1.5.jar
+  jersey-client-2.22.2.jar RoaringBitmap-0.5.11.jar protobuf-java-2.5.0.
+ jar json4s-core_2.11-3.5.3.jar hadoop-mapreduce-client-jobclient-2.6.5.
+ jar json4s-jackson_2.11-3.5.3.jar hadoop-yarn-client-2.6.5.jar parquet-
+ column-1.10.0.jar minlog-1.3.0.jar hadoop-yarn-api-2.6.5.jar hadoop-hdf
+ s-2.6.5.jar jcl-over-slf4j-1.7.16.jar antlr4-runtime-4.7.jar hppc-0.7.2
+ .jar httpclient-4.2.5.jar spark-network-shuffle_2.11-2.4.0.jar metrics-
+ core-3.1.5.jar unused-1.0.0.jar jackson-databind-2.6.7.1.jar curator-fr
+ amework-2.6.0.jar netty-all-4.1.17.Final.jar jackson-module-paranamer-2
+ .7.9.jar parquet-common-1.10.0.jar hk2-locator-2.4.0-b34.jar jetty-util
+ -6.1.26.jar javax.inject-2.4.0-b34.jar spark-tags_2.11-2.4.0.jar common
+ s-net-3.1.jar chill_2.11-0.9.3.jar jackson-core-asl-1.9.13.jar jackson-
+ module-scala_2.11-2.6.7.1.jar xml-apis-1.3.04.jar parquet-hadoop-1.10.0
+ .jar avro-1.8.2.jar lz4-java-1.4.0.jar orc-shims-1.5.2.jar commons-bean
+ utils-core-1.8.0.jar parquet-encoding-1.10.0.jar stax-api-1.0-2.jar jac
+ kson-xc-1.9.13.jar jersey-container-servlet-2.22.2.jar scala-xml_2.11-1
+ .0.6.jar hk2-utils-2.4.0-b34.jar hadoop-mapreduce-client-app-2.6.5.jar 
+ scala-library-2.11.12.jar avro-ipc-1.8.2.jar htrace-core-3.0.4.jar api-
+ asn1-api-1.0.0-M20.jar commons-collections-3.2.2.jar avro-mapred-1.8.2-
+ hadoop2.jar apacheds-i18n-2.0.0-M15.jar scala-reflect-2.11.12.jar scala
+ -parser-combinators_2.11-1.1.0.jar zookeeper-3.4.6.jar api-util-1.0.0-M
+ 20.jar jackson-core-2.6.7.jar jersey-guava-2.22.2.jar janino-3.0.9.jar 
+ commons-configuration-1.6.jar ivy-2.4.0.jar metrics-jvm-3.1.5.jar curat
+ or-recipes-2.6.0.jar json4s-scalap_2.11-3.5.3.jar flatbuffers-1.2.0-3f7
+ 9e055.jar zstd-jni-1.3.2-2.jar javassist-3.18.1-GA.jar hadoop-mapreduce
+ -client-shuffle-2.6.5.jar
+
