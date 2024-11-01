@@ -67,11 +67,11 @@ public class Test1 {
                 "Therefore shall a man leave his father and his mother, and shall cleave unto his wife: and they shall be one flesh.",
                 "And they were both naked, the man and his wife, and were not ashamed."
         };
-        ZipfGenerator1 zipfGenerator = new ZipfGenerator1(words, 0.1);
+        ZipfGenerator1 zipfGenerator = new ZipfGenerator1(words, 1.0);
         PrintWriter printWriter = null;
-        long targetSizeInBytes = 5L * 1024 * 1024 * 1024;   // 2GB
+        double targetSizeInBytes = 0.2 * 1024 * 1024 * 1024;   // 5GB
         try {
-            printWriter = new PrintWriter(new FileWriter("input/zip-f/skewness_0.1.txt"));
+            printWriter = new PrintWriter(new FileWriter("input/zip-f/skewness_0.2g.txt"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

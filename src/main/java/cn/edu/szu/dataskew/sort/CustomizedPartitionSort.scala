@@ -1,15 +1,15 @@
 package cn.edu.szu.dataskew.sort
 
 import org.apache.spark.common.ConfigurableOrderedRDDFunctions
-import org.apache.spark.partitioner.DensityAwarePartitioner
+import org.apache.spark.partitioner.{CustomizedPartitioner, SamplingUtils}
 import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkConf, SparkContext}
 
 import scala.language.implicitConversions
-import scala.math.sqrt
+import scala.math.{sqrt, toRadians}
 import scala.reflect.ClassTag
 
-object DensityAwarePartitionerSort {
+object CustomizedPartitionSort {
   implicit def rddToHashedRDDFunctions[K : Ordering : ClassTag, V: ClassTag]
   (rdd: RDD[(K, V)]): ConfigurableOrderedRDDFunctions[K, V, (K, V)] = new ConfigurableOrderedRDDFunctions[K, V, (K, V)](rdd)
 
@@ -18,7 +18,7 @@ object DensityAwarePartitionerSort {
     // 创建SparkConf对象并设置配置
     val sparkConf = new SparkConf()
       .setMaster("yarn")
-      .setAppName("DensityAwarePartitionerSort")
+      .setAppName("CustomizedPartitionSort")
       .set("spark.submit.deployMode", "cluster")
       .set("spark.dynamicAllocation.enabled", "false")
       .set("spark.executor.extraJavaOptions", "-Dfile.encoding=UTF-8")
@@ -39,9 +39,13 @@ object DensityAwarePartitionerSort {
     println("Map Time: " + (mapEndTime - mapStartTime) + "ms")
     // 记录 reduce 阶段开始时间
     val reduceStartTime = System.currentTimeMillis()
-    // 使用默认分区器
-    val partitioner: DensityAwarePartitioner[String, Int] = new DensityAwarePartitioner[String, Int](parallel, wordToOne)
-    val sorted = wordToOne.sortByKeyWithPartitioner(partitioner = partitioner).map(_._1)
+    // 对RDD进行转换
+    val rdd1 = SamplingUtils.addIndexToKey(sc, wordToOne)
+    // 使用自定义分区器
+    val partitioner: CustomizedPartitioner[String, Int] = new CustomizedPartitioner[String, Int](parallel, rdd1)
+    val rdd2 = wordToOne.sortByKeyWithPartitioner(partitioner = partitioner)
+    // 还原RDD
+    val sorted = SamplingUtils.removeIndexToKey(rdd2).map(_._1)
     // 记录 reduce 阶段结束时间
     val reduceEndTime = System.currentTimeMillis()
     // 记录结束时间

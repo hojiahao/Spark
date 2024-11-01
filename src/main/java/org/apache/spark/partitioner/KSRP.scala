@@ -275,10 +275,10 @@ private[spark] object KSRP {
     bounds.toArray
   }
 
-  //  def main (args: Array[String]){
-  //    val keys = Array(("a", 11.0), ("b", 3.0), ("c",9.0), ("d", 1.0), ("e", 7.0), ("f", 3.0), ("g",4.0), ("h", 8.0) )
-  //    val (maxWeight, bounds) = reAssignKeysByLIBRA(keys, 4)
-  //    println("maxWeight = " + maxWeight)
-  //    println("bounds = [" + bounds.mkString(", ") + " ]")
-  //  }
+//    def main (args: Array[String]){
+//      val keys = Array(("a", 11.0), ("b", 3.0), ("c",9.0), ("d", 1.0), ("e", 7.0), ("f", 3.0), ("g",4.0), ("h", 8.0) )
+//      val (maxWeight, bounds) = reAssignKeysByLIBRA(keys, 4)
+//      println("maxWeight = " + maxWeight)
+//      println("bounds = [" + bounds.mkString(", ") + " ]")
+//    }
 }
