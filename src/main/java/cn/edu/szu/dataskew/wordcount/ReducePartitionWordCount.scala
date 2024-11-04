@@ -4,73 +4,77 @@ import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.spark.partitioner.ReducePartitioner
 import org.apache.spark.rdd.RDD
 
-import scala.math.sqrt
+import scala.math.{pow, sqrt}
 
 object ReducePartitionWordCount {
 
   def main(args: Array[String]): Unit = {
-    val map_parallelism = args(1).toInt
-    val samplingRate = args(2).toDouble
+    val inputPath = args(0)
+    val outputPath = args(1)
+    val map_parallelism = args(2).toInt
     // 创建SparkConf对象并设置配置
     val sparkConf = new SparkConf()
       .setMaster("yarn")
       .setAppName("ReducePartitionWordCount")
       .set("spark.submit.deployMode", "cluster")
-      .set("2", "false")
+      .set("spark.dynamicAllocation.enabled", "false")
       .set("spark.executor.extraJavaOptions", "-Dfile.encoding=UTF-8")
       .set("spark.driver.extraJavaOptions", "-Dfile.encoding=UTF-8")
     val sc = new SparkContext(sparkConf)
     val parallel = sc.getConf.getInt("spark.default.parallelism", sc.defaultParallelism)
 
-    // 记录开始时间
-    val jobStartTime = System.currentTimeMillis()
-    val filepath = args(0)
-    val lines: RDD[String] = sc.textFile(filepath, map_parallelism)
-    val mapStartTime = System.currentTimeMillis()
+    val startTime = System.currentTimeMillis()
+    val lines: RDD[String] = sc.textFile(inputPath, map_parallelism)
     // 使用flatMap来分割单词，使用正则表达式 "[\\s,.\n\t?!]+"是一个正则表达式，用于匹配空白字符、逗号、点、换行符、制表符、问号和感叹号。）
     val words: RDD[String] = lines.flatMap(_.split("[\\s,.:\n\t?!\\d]+"))
     // 映射单词为键值对(word, 1)
-    val wordToOne: RDD[(String, Int)] = words.map((word: String) => (word, 1))
-    val mapEndTime = System.currentTimeMillis()
-    println("Map Time: " + (mapEndTime - mapStartTime) + "ms")
+    val wordToOne: RDD[(String, Int)] = words.map((word:String) => (word, 1))
     // 使用自定义分区器
-    val partitioner: ReducePartitioner[String, Int] = new ReducePartitioner[String, Int](parallel, samplingRate)
-    partitioner.initialize(wordToOne)
-    // groupByKey 和 reduceByKey 操作
-    val reduceStartTime = System.currentTimeMillis()
-    // reduce之前先进行repartition，以确保数据均匀分布
+    val partitioner: ReducePartitioner[String, Int]= new ReducePartitioner[String, Int](parallel, 0.2)
     val wordToGroup: RDD[(String, Iterable[Int])] = wordToOne.groupByKey(partitioner)
-    // 计算每个单词的总数（局部聚合）
-    val wordToCount: RDD[(String, Int)] = wordToGroup.mapValues(iter => iter.sum)
-    // 全局聚合
-    val result: RDD[(String, Int)] = wordToCount.reduceByKey(_+_)
-    val reduceEndTime = System.currentTimeMillis() // End time for the Reduce stage
-    val jobEndTime = System.currentTimeMillis() // End time for the entire job
-    println("Reduce Time: " + (reduceEndTime - reduceStartTime) + "ms")
-    println(s"Total Job Execute Time: ${jobEndTime - jobStartTime}" + "ms")
+    // 计算每个单词的总数
+    val wordCounts: RDD[(String, Int)] = wordToGroup.mapValues(iter => iter.sum)
+    // 输出Map阶段的分区个数
+    println("number of Mappers:" + wordToOne.getNumPartitions)
+    // 输出Reduce阶段的分区个数
+    println("number of reducers:" + wordCounts.getNumPartitions)
 
-    val partitionLengths: Array[(Int, Int)] = result.mapPartitionsWithIndex {
-      (index, data) => {
-        var len = 0
-        while (data.hasNext) {
-          len += 1 // 计数分区中的元素数量
-          data.next()
-        }
-        Iterator((index, len))
-      }
-    }.collect()
+    // 统计每个分区的单词数量
+    val partitionCounts: RDD[(Int, Int)] = wordCounts.mapPartitionsWithIndex { (index, iterator) =>
+      // 初始化分区中单词计数的总和
+      val count = iterator.foldLeft(0)((sum, tuple) => sum + tuple._2)
+      // 返回分区索引和该分区中单词计数的总和
+      Iterator((index, count))
+      //      Iterator((index, iterator.size))
+    }
 
-    // Compute partition sizes for COV calculation
-    val partitionSizes = partitionLengths.map({ case (index, len) => len })
-    // Compute average size of partitions
-    val mean = partitionSizes.sum.toDouble / partitionSizes.length
-    // Compute standard deviation
-    val variance = partitionSizes.map(size => math.pow(size - mean, 2)).sum / partitionSizes.length
-    val stddev = sqrt(variance)
-    // Compute COV (Coefficient of Variation)
-    val cov = stddev / mean
-    println("cov:" + cov)
+    // 收集每个分区的数据量
+    val counts: Array[(Int, Int)] = partitionCounts.collect()
 
+    // 计算均值和标准差
+    val dataSizes = counts.map(_._2)
+    val mean = dataSizes.sum.toDouble / dataSizes.length
+    val variance = dataSizes.map(size => pow(size - mean, 2)).sum / dataSizes.length
+    val standardDeviation = sqrt(variance)
+
+    // 计算变异系数
+    val coefficientOfVariation = if (mean != 0) standardDeviation / mean else 0
+
+    //    // 打印每个分区的数据量和变异系数
+    //    println("每个分区的数据量：")
+    //    counts.foreach { case (partitionIndex, count) =>
+    //      println(s"分区 $partitionIndex: $count")
+    //    }
+    println(s"coefficient: $coefficientOfVariation")
+
+    val endTime = System.currentTimeMillis()
+    println("Job's execute time:" + (endTime - startTime) + "ms")
+    println(s"运行时间: ${(endTime - startTime) / 1000.0} s")
+    wordCounts.saveAsTextFile(outputPath)
+    //    println("result:")
+    //    wordToCount.collect().foreach(println)
+
+    // 关闭spark连接
     sc.stop()
   }
 }

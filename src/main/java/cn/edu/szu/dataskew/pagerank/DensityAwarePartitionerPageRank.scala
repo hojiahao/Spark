@@ -4,11 +4,13 @@ import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.spark.partitioner.DensityAwarePartitioner
 import org.apache.spark.rdd.RDD
 
-import scala.math.sqrt
+import scala.math.{pow, sqrt}
 
 object DensityAwarePartitionerPageRank {
   def main(args: Array[String]): Unit = {
-    val map_parallelism = args(1).toInt
+    val inputPath = args(0)
+    val outputPath = args(1)
+    val map_parallelism = args(2).toInt
     // 创建SparkConf对象并设置配置
     val sparkConf = new SparkConf()
       .setMaster("yarn")
@@ -21,10 +23,9 @@ object DensityAwarePartitionerPageRank {
     val parallel = sc.getConf.getInt("spark.default.parallelism", sc.defaultParallelism)
 
     // 记录开始时间
-    val jobStartTime = System.currentTimeMillis()
-    val filepath = args(0)
-    val iters = if (args.length > 2) args(2).toInt else 10
-    val lines: RDD[String] = sc.textFile(filepath, map_parallelism)
+    val startTime = System.currentTimeMillis()
+    val iters = if (args.length > 3) args(3).toInt else 10
+    val lines: RDD[String] = sc.textFile(inputPath, map_parallelism)
     val mapStartTime = System.currentTimeMillis() // Start time for the Map stage
     // 使用flatMap来分割单词，使用正则表达式 "[\\s,.\n\t?!]+"是一个正则表达式，用于匹配空白字符、逗号、点、换行符、制表符、问号和感叹号。）
     val links = lines.map({ s =>
@@ -32,14 +33,11 @@ object DensityAwarePartitionerPageRank {
       val parts = elements.slice(elements.length - 2, elements.length)
       (parts(0), parts(1))
     }).distinct()
-    val mapEndTime = System.currentTimeMillis() // End time for the Map stage
-    println("Map Time: " + (mapEndTime - mapStartTime) + "ms")
     // 使用自定义分区算法
     val partitioner: DensityAwarePartitioner[String, String] = new DensityAwarePartitioner[String, String](parallel, links)
     val linksToGroup = links.groupByKey(partitioner).cache()
     var ranks = linksToGroup.mapValues(v => 1.0)
 
-    val reduceStartTime = System.currentTimeMillis() // End time for the Map stage
     for (i <- 1 to iters) {
       val contribs = linksToGroup.join(ranks).values.flatMap{ case (urls, rank) =>
         val size = urls.size
@@ -48,33 +46,10 @@ object DensityAwarePartitionerPageRank {
       ranks = contribs.reduceByKey(_ + _).mapValues(0.15 + 0.85 * _)
     }
 
-    val reduceEndTime = System.currentTimeMillis() // End time for the Reduce stage
-    val jobEndTime = System.currentTimeMillis() // End time for the entire job
-    println("Reduce Time: " + (reduceEndTime - reduceStartTime) + "ms")
-    println(s"Total Job Execute Time: ${jobEndTime - jobStartTime}" + "ms")
-
-    val partitionLengths: Array[(Int, Int)] = ranks.mapPartitionsWithIndex {
-      (index, data) => {
-        var len = 0
-        while (data.hasNext) {
-          len += 1 // 计数分区中的元素数量
-          data.next()
-        }
-        Iterator((index, len))
-      }
-    }.collect()
-
-    // Compute partition sizes for COV calculation
-    val partitionSizes = partitionLengths.map({ case (index, len) => len })
-    // Compute average size of partitions
-    val mean = partitionSizes.sum.toDouble / partitionSizes.length
-    // Compute standard deviation
-    val variance = partitionSizes.map(size => math.pow(size - mean, 2)).sum / partitionSizes.length
-    val stddev = sqrt(variance)
-    // Compute COV (Coefficient of Variation)
-    val cov = stddev / mean
-    println("cov:" + cov)
-
+    val endTime = System.currentTimeMillis()
+    println("Job's execute time:" + (endTime - startTime) + "ms")
+    println(s"运行时间: ${(endTime - startTime) / 1000.0} s")
+    ranks.saveAsTextFile(outputPath)
     // 关闭spark连接
     sc.stop()
   }

@@ -2,26 +2,41 @@
 <project version="4">
   <component name="ArtifactsWorkspaceSettings">
     <artifacts-to-build>
-      <artifact name="DensityAwarePartitionerSort:jar" />
+      <artifact name="CustomizedPartitionSort:jar" />
+      <artifact name="CustomizedPartitionWordCount:jar" />
     </artifacts-to-build>
   </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3183c2b0-de09-4dd4-a90c-7e3b6be44004" name="Changes" comment="changeg files">
-      <change afterPath="$PROJECT_DIR$/src/main/java/cn/edu/szu/dataskew/sort/CustomizedPartitionSort.scala" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/cn/edu/szu/dataskew/wordcount/CustomizedPartitionWordCount.scala" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/apache/spark/partitioner/CustomizedPartitioner.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/DensityAwarePartitionerPageRank_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/DensityAwarePartitionerPageRank_jar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/DensityAwarePartitionerSort_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/DensityAwarePartitionerSort_jar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/DensityAwarePartitionerWordCount_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/DensityAwarePartitionerWordCount_jar.xml" afterDir="false" />
+    <list default="true" id="3183c2b0-de09-4dd4-a90c-7e3b6be44004" name="Changes" comment="A lot of changes have been introduced">
+      <change afterPath="$PROJECT_DIR$/.idea/artifacts/CustomizedPartitionSort_jar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/artifacts/CustomizedPartitionWordCount_jar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/cn/edu/szu/dataskew/pagerank/TimeShiftedPartitionPageRank.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/apache/spark/partitioner/TimeShiftedPartitioner.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cn/edu/szu/dataskew/pagerank/DensityAwarePartitionerPageRank.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/edu/szu/dataskew/pagerank/DensityAwarePartitionerPageRank.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cn/edu/szu/dataskew/pagerank/HashPartitionPageRank.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/edu/szu/dataskew/pagerank/HashPartitionPageRank.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cn/edu/szu/dataskew/pagerank/KSRPPageRank.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/edu/szu/dataskew/pagerank/KSRPPageRank.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cn/edu/szu/dataskew/pagerank/RTLBPAPageRank.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/edu/szu/dataskew/pagerank/RTLBPAPageRank.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cn/edu/szu/dataskew/pagerank/RangePartitionPageRank.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/edu/szu/dataskew/pagerank/RangePartitionPageRank.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cn/edu/szu/dataskew/sort/CustomizedPartitionSort.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/edu/szu/dataskew/sort/TimeShiftedPartitionSort.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/cn/edu/szu/dataskew/sort/DensityAwarePartitionerSort.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/edu/szu/dataskew/sort/DensityAwarePartitionerSort.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/apache/spark/partitioner/KSRP.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/apache/spark/partitioner/KSRP.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cn/edu/szu/dataskew/sort/HashPartitionSort.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/edu/szu/dataskew/sort/HashPartitionSort.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cn/edu/szu/dataskew/sort/KSRPSort.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/edu/szu/dataskew/sort/KSRPSort.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cn/edu/szu/dataskew/sort/RTLBPASort.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/edu/szu/dataskew/sort/RTLBPASort.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cn/edu/szu/dataskew/sort/RangePartitionSort.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/edu/szu/dataskew/sort/RangePartitionSort.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cn/edu/szu/dataskew/wordcount/CustomizedPartitionWordCount.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/edu/szu/dataskew/wordcount/TimeShiftedPartitionWordCount.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cn/edu/szu/dataskew/wordcount/DensityAwarePartitionerWordCount.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/edu/szu/dataskew/wordcount/DensityAwarePartitionerWordCount.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cn/edu/szu/dataskew/wordcount/HashPartitionWordCount.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/edu/szu/dataskew/wordcount/HashPartitionWordCount.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cn/edu/szu/dataskew/wordcount/KSRPWordCount.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/edu/szu/dataskew/wordcount/KSRPWordCount.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cn/edu/szu/dataskew/wordcount/RTLBPAWordCount.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/edu/szu/dataskew/wordcount/RTLBPAWordCount.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cn/edu/szu/dataskew/wordcount/RangePartitionWordCount.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/edu/szu/dataskew/wordcount/RangePartitionWordCount.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cn/edu/szu/dataskew/wordcount/ReducePartitionWordCount.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/edu/szu/dataskew/wordcount/ReducePartitionWordCount.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/apache/spark/partitioner/CustomizedPartitioner.scala" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/apache/spark/partitioner/SamplingUtils.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/apache/spark/partitioner/SamplingUtils.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/META-INF/MANIFEST.MF" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/META-INF/MANIFEST.MF" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/Test1.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/Test1.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,9 +70,11 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Application.CustomizedPartitionSort.executor": "Debug",
     "Application.DensityAwarePartitionerSort.executor": "Run",
     "Application.Test1.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "D:/ResearchWorks/dataSkewOptimization/src/main/java/org/apache/spark/partitioner",
@@ -76,11 +93,25 @@
       <recent name="D:\ResearchWorks\dataSkewOptimization\src\main\java\org\apache\spark\partitioner" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="cn.edu.szu.dataskew.pagerank" />
       <recent name="cn.edu.szu.dataskew.wordcount" />
       <recent name="cn.edu.szu.dataskew.sort" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.DensityAwarePartitionerSort">
+  <component name="RunManager" selected="Application.CustomizedPartitionSort">
+    <configuration name="CustomizedPartitionSort" type="Application" factoryName="Application" temporary="true">
+      <option name="MAIN_CLASS_NAME" value="cn.edu.szu.dataskew.sort.CustomizedPartitionSort" />
+      <module name="dataSkewOptimization" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="cn.edu.szu.dataskew.sort.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="DensityAwarePartitionerSort" type="Application" factoryName="Application" temporary="true">
       <option name="MAIN_CLASS_NAME" value="cn.edu.szu.dataskew.sort.DensityAwarePartitionerSort" />
       <module name="dataSkewOptimization" />
@@ -102,11 +133,13 @@
       </method>
     </configuration>
     <list>
+      <item itemvalue="Application.CustomizedPartitionSort" />
       <item itemvalue="Application.DensityAwarePartitionerSort" />
       <item itemvalue="Application.Test1" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.CustomizedPartitionSort" />
         <item itemvalue="Application.DensityAwarePartitionerSort" />
         <item itemvalue="Application.Test1" />
       </list>
@@ -136,9 +169,17 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1730442007338</updated>
-      <workItem from="1730442007338" duration="9549000" />
+      <workItem from="1730442007338" duration="26138000" />
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="A lot of changes have been introduced">
+      <option name="closed" value="true" />
+      <created>1730451674408</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1730451674408</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -147,6 +188,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="First commit Spark projects" />
     <MESSAGE value="changeg files" />
-    <option name="LAST_COMMIT_MESSAGE" value="changeg files" />
+    <MESSAGE value="A lot of changes have been introduced" />
+    <option name="LAST_COMMIT_MESSAGE" value="A lot of changes have been introduced" />
   </component>
 </project>

@@ -1,12 +1,10 @@
 package cn.edu.szu.dataskew.pagerank
 
-import org.apache.spark.{SparkConf, SparkContext}
-import org.apache.spark.partitioner.KSRP
+import org.apache.spark.partitioner.TimeShiftedPartitioner
 import org.apache.spark.rdd.RDD
+import org.apache.spark.{SparkConf, SparkContext}
 
-import scala.math.sqrt
-
-object KSRPPageRank {
+object TimeShiftedPartitionPageRank {
   def main(args: Array[String]): Unit = {
     val inputPath = args(0)
     val outputPath = args(1)
@@ -14,7 +12,7 @@ object KSRPPageRank {
     // 创建SparkConf对象并设置配置
     val sparkConf = new SparkConf()
       .setMaster("yarn")
-      .setAppName("HashPartitionPageRank")
+      .setAppName("TimeShiftedPartitionPageRank")
       .set("spark.submit.deployMode", "cluster")
       .set("spark.dynamicAllocation.enabled", "false")
       .set("spark.executor.extraJavaOptions", "-Dfile.encoding=UTF-8")
@@ -34,7 +32,7 @@ object KSRPPageRank {
       (parts(0), parts(1))
     }).distinct()
     // 使用自定义分区算法
-    val partitioner: KSRP[String, String] = new KSRP[String, String](parallel, links)
+    val partitioner: TimeShiftedPartitioner = new TimeShiftedPartitioner(parallel)
     val linksToGroup = links.groupByKey(partitioner).cache()
     var ranks = linksToGroup.mapValues(v => 1.0)
 

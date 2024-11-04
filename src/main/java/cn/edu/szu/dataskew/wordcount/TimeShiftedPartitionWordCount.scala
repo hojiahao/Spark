@@ -1,12 +1,12 @@
 package cn.edu.szu.dataskew.wordcount
 
-import org.apache.spark.{SparkConf, SparkContext}
-import org.apache.spark.partitioner.DensityAwarePartitioner
+import org.apache.spark.partitioner.TimeShiftedPartitioner
 import org.apache.spark.rdd.RDD
+import org.apache.spark.{SparkConf, SparkContext}
 
 import scala.math.{pow, sqrt}
 
-object DensityAwarePartitionerWordCount {
+object TimeShiftedPartitionWordCount {
   def main(args: Array[String]): Unit = {
     val inputPath = args(0)
     val outputPath = args(1)
@@ -14,7 +14,7 @@ object DensityAwarePartitionerWordCount {
     // 创建SparkConf对象并设置配置
     val sparkConf = new SparkConf()
       .setMaster("yarn")
-      .setAppName("DensityAwarePartitionerWordCount")
+      .setAppName("TimeShiftedPartitionWordCount")
       .set("spark.submit.deployMode", "cluster")
       .set("spark.dynamicAllocation.enabled", "false")
       .set("spark.executor.extraJavaOptions", "-Dfile.encoding=UTF-8")
@@ -22,14 +22,16 @@ object DensityAwarePartitionerWordCount {
     val sc = new SparkContext(sparkConf)
     val parallel = sc.getConf.getInt("spark.default.parallelism", sc.defaultParallelism)
 
+    // 记录开始时间
     val startTime = System.currentTimeMillis()
     val lines: RDD[String] = sc.textFile(inputPath, map_parallelism)
     // 使用flatMap来分割单词，使用正则表达式 "[\\s,.\n\t?!]+"是一个正则表达式，用于匹配空白字符、逗号、点、换行符、制表符、问号和感叹号。）
     val words: RDD[String] = lines.flatMap(_.split("[\\s,.:\n\t?!\\d]+"))
     // 映射单词为键值对(word, 1)
     val wordToOne: RDD[(String, Int)] = words.map((word:String) => (word, 1))
-    // 使用自定义分区器
-    val partitioner: DensityAwarePartitioner[String, Int] = new DensityAwarePartitioner[String, Int](parallel, wordToOne)
+    // 对RDD进行转换
+    val partitioner: TimeShiftedPartitioner = new TimeShiftedPartitioner(parallel)
+    // reduce之前先进行repartition，以确保数据均匀分布
     val wordToGroup: RDD[(String, Iterable[Int])] = wordToOne.groupByKey(partitioner)
     // 计算每个单词的总数
     val wordCounts: RDD[(String, Int)] = wordToGroup.mapValues(iter => iter.sum)
@@ -58,21 +60,12 @@ object DensityAwarePartitionerWordCount {
 
     // 计算变异系数
     val coefficientOfVariation = if (mean != 0) standardDeviation / mean else 0
-
-//    // 打印每个分区的数据量和变异系数
-//    println("每个分区的数据量：")
-//    counts.foreach { case (partitionIndex, count) =>
-//      println(s"分区 $partitionIndex: $count")
-//    }
     println(s"coefficient: $coefficientOfVariation")
 
     val endTime = System.currentTimeMillis()
     println("Job's execute time:" + (endTime - startTime) + "ms")
     println(s"运行时间: ${(endTime - startTime) / 1000.0} s")
     wordCounts.saveAsTextFile(outputPath)
-    //    println("result:")
-    //    wordToCount.collect().foreach(println)
-
     // 关闭spark连接
     sc.stop()
   }

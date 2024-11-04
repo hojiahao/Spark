@@ -29,14 +29,14 @@ import scala.util.Random
 
 object SamplingUtils {
 
-  def addIndexToKey[K: ClassTag, V: ClassTag](sc: SparkContext,rdd: RDD[(K, V)]): RDD[(K, V)] = {
+  def addIndexToKey[K: ClassTag, V](sc: SparkContext,rdd: RDD[(K, V)]): RDD[(K, V)] = {
     val indexed = ArrayBuffer[(K, V)]()
     rdd.mapPartitionsWithIndex({ (index, iter) => {
       val map = mutable.Map[K, Int]()
       iter.foreach({ case (key, value) =>
         val id = map.getOrElse(key, 0)
         val newKey = (key.toString + '_' + id.toString).asInstanceOf[K]
-        indexed += (newKey, value)
+        indexed += ((newKey, value))
         map(key) = id + 1
       })
       Iterator.empty
@@ -44,7 +44,7 @@ object SamplingUtils {
     sc.parallelize(indexed, sc.defaultParallelism)
   }
 
-  def removeIndexToKey[K: ClassTag, V: ClassTag](rdd: RDD[(K, V)]): RDD[(K, V)] = {
+  def removeIndexToKey[K: ClassTag, V](rdd: RDD[(K, V)]): RDD[(K, V)] = {
     // 将 ArrayBuffer 转换为 RDD，并映射为 (key, value) 格式
     val resultRDD = rdd.map { case (key, value) =>
       val originalKey = key.toString.split("_").dropRight(1).mkString("_").asInstanceOf[K]
